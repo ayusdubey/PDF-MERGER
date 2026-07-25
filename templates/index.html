@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PDF Merger</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Google Fonts for modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #18181b;
+            min-height: 100vh;
+            font-family: 'Montserrat', sans-serif;
+            color: #fff;
+            position: relative;
+        }
+        .accent-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 120px;
+            background: linear-gradient(120deg, #a259ff 0%, #6366f1 100%);
+            clip-path: polygon(0 0, 100% 0, 100% 70%, 0 100%);
+            z-index: 0;
+        }
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+        .accenture-card {
+            background: rgba(36,36,40,0.95);
+            box-shadow: 0 8px 32px 0 rgba(99,102,241,0.18);
+            border-radius: 1.5rem;
+            border: 1px solid rgba(99,102,241,0.18);
+            padding: 2.5rem 2rem;
+            margin-top: 4rem;
+            transition: box-shadow 0.3s;
+        }
+        .accenture-card:hover {
+            box-shadow: 0 16px 48px rgba(162,89,255,0.25);
+        }
+        .accenture-header {
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            margin-bottom: 1.2rem;
+            color: #fff;
+            position: relative;
+        }
+        .accenture-header:after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 6px;
+            background: linear-gradient(90deg, #a259ff 0%, #6366f1 100%);
+            border-radius: 3px;
+            margin: 18px auto 0 auto;
+        }
+        .btn-accenture {
+            background: linear-gradient(90deg, #a259ff 0%, #6366f1 100%);
+            color: #fff;
+            border: none;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-radius: 2rem;
+            padding: 0.75rem 0;
+            box-shadow: 0 2px 12px rgba(99,102,241,0.18);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-accenture:hover, .btn-accenture:focus {
+            background: linear-gradient(90deg, #6366f1 0%, #a259ff 100%);
+            transform: scale(1.04);
+            box-shadow: 0 4px 24px rgba(162,89,255,0.25);
+        }
+        .btn-accenture:active {
+            transform: scale(0.98);
+        }
+        .file-list {
+            margin-top: 10px;
+            font-size: 1em;
+            color: #a259ff;
+            background: rgba(162,89,255,0.07);
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+        }
+        .footer-icon {
+            color: #a259ff;
+            margin-right: 5px;
+            font-size: 1.2rem;
+        }
+        .card-icon {
+            font-size: 3rem;
+            color: #a259ff;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 8px #a259ff44;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #a259ff;
+        }
+        .download-link {
+            animation: fadeIn 1s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .accenture-footer {
+            margin-top: 3rem;
+            font-size: 1rem;
+            color: #a3a3a3;
+            letter-spacing: 1px;
+        }
+        .plans-section {
+            margin-top: 3rem;
+            margin-bottom: 2rem;
+        }
+        .plan-card {
+            background: rgba(36,36,40,0.95);
+            border-radius: 1rem;
+            border: 1px solid rgba(99,102,241,0.18);
+            box-shadow: 0 4px 16px rgba(99,102,241,0.10);
+            padding: 2rem 1.5rem;
+            color: #fff;
+            transition: box-shadow 0.2s;
+        }
+        .plan-card:hover {
+            box-shadow: 0 8px 32px rgba(162,89,255,0.18);
+        }
+        .plan-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #a259ff;
+            margin-bottom: 0.5rem;
+        }
+        .plan-price {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+        .plan-desc {
+            font-size: 1rem;
+            color: #a3a3a3;
+            margin-bottom: 1rem;
+        }
+        .plan-btn {
+            background: linear-gradient(90deg, #a259ff 0%, #6366f1 100%);
+            color: #fff;
+            border: none;
+            border-radius: 2rem;
+            font-weight: 700;
+            padding: 0.5rem 2rem;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .plan-btn:hover {
+            background: linear-gradient(90deg, #6366f1 0%, #a259ff 100%);
+            transform: scale(1.05);
+        }
+        .plan-limit {
+            font-size: 0.95rem;
+            color: #6366f1;
+            margin-bottom: 0.5rem;
+        }
+        .navbar-accenture {
+            background: rgba(24,24,27,0.98);
+            border-bottom: 2px solid #a259ff;
+            box-shadow: 0 2px 12px rgba(99,102,241,0.10);
+        }
+        .navbar-brand-accenture {
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: #fff !important; /* Changed from accent to white */
+            letter-spacing: 2px;
+            text-shadow: 0 2px 8px #a259ff55;
+        }
+        .nav-link-accenture {
+            color: #e0e7ff !important; /* Changed from white to lighter accent */
+            font-weight: 600;
+            margin-right: 1rem;
+            transition: color 0.2s;
+            text-shadow: 0 2px 8px #a259ff33;
+        }
+        .nav-link-accenture:hover, .nav-link-accenture.active {
+            color: #a259ff !important;
+        }
+        /* Add this for toggler icon visibility */
+        .navbar-toggler {
+            border: none;
+            outline: none;
+        }
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(162,89,255, 0.85)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+        }
+        @media (max-width: 768px) {
+            .accenture-card { padding: 1.5rem 0.5rem; }
+            .accenture-header { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-accenture">
+        <div class="container">
+            <a class="navbar-brand navbar-brand-accenture btn btn-accenture" href="#" style="border-radius:2rem;font-weight:600;">PDF Merger</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarAccent" aria-controls="navbarAccent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon" style="filter: invert(1);"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarAccent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="btn btn-accenture me-2" style="border-radius:2rem;font-weight:600;" aria-current="page" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-accenture me-2" style="border-radius:2rem;font-weight:600;" href="#plans">Plans</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/signup" class="btn btn-accenture" style="border-radius:2rem;font-weight:600;">Sign Up</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="accent-bar"></div>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-7 col-md-9">
+                <div class="accenture-card text-center">
+                    <div class="card-icon">📄</div>
+                    <div class="accenture-header">PDF Merger</div>
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                      {% if messages %}
+                        {% for category, message in messages %}
+                          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                          </div>
+                        {% endfor %}
+                      {% endif %}
+                    {% endwith %}
+                    <div class="mb-3">
+                        <span class="badge bg-primary" style="font-size:1rem;border-radius:1rem;">
+                            {% if plan == 'pro' %}
+                                Pro Plan: Unlimited merges
+                            {% else %}
+                                Free Plan: Up to 2 merges per day
+                            {% endif %}
+                        </span>
+                    </div>
+                    <form method="post" enctype="multipart/form-data" class="mb-3">
+                        <div class="mb-3 text-start">
+                            <label for="pdfs" class="form-label">Choose PDF files to merge</label>
+                            <input class="form-control" type="file" id="pdfs" name="pdfs" multiple accept="application/pdf" onchange="showFileList()">
+                            <div id="fileList" class="file-list"></div>
+                        </div>
+                        <button type="submit" class="btn btn-accenture w-100" id="mergeBtn">Merge Selected PDFs</button>
+                    </form>
+                    <div class="mt-4 text-center">
+                        {% if merged %}
+                        <a href="{{ url_for('download_file') }}" class="btn btn-success download-link">⬇️ Download Your Merged PDF</a>
+                        {% endif %}
+                        {% if plan == 'free' %}
+                        <div class="mt-3">
+                            <a href="{{ url_for('index', plan='pro') }}" class="btn btn-accenture" style="border-radius:2rem;font-weight:600;">Upgrade to Pro</a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Plans & Subscription Section (always visible) -->
+        <div class="row justify-content-center plans-section" id="plans">
+            <div class="col-md-5 mb-3">
+                <div class="plan-card text-center">
+                    <div class="plan-title">Free Plan</div>
+                    <div class="plan-price">$0<span style="font-size:1rem;font-weight:600;">/month</span></div>
+                    <div class="plan-limit">Merge up to 2 PDFs per day</div>
+                    <div class="plan-desc">Ideal for casual users. No payment or registration required.</div>
+                    <button class="plan-btn" disabled>Current Plan</button>
+                </div>
+            </div>
+            <div class="col-md-5 mb-3">
+                <div class="plan-card text-center">
+                    <div class="plan-title">Pro Plan</div>
+                    <div class="plan-price">$9<span style="font-size:1rem;font-weight:600;">/month</span></div>
+                    <div class="plan-limit">Unlimited PDF merges</div>
+                    <div class="plan-desc">Perfect for professionals and businesses. Includes priority support.</div>
+                    <button class="plan-btn">Upgrade to Pro</button>
+                </div>
+            </div>
+        </div>
+        <footer class="accenture-footer text-center">
+            <span class="footer-icon">&#128187;</span>
+            <small>Powered by Ayus</small>
+        </footer>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function showFileList() {
+            const input = document.getElementById('pdfs');
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = '';
+            if (input.files.length > 0) {
+                let list = '<strong>Selected files:</strong><ul style="list-style:none;padding-left:0;">';
+                for (let i = 0; i < input.files.length; i++) {
+                    list += `<li>📄 ${input.files[i].name}</li>`;
+                }
+                list += '</ul>';
+                fileList.innerHTML = list;
+            }
+        }
+        document.getElementById('mergeBtn').addEventListener('click', function() {
+            this.classList.add('btn-success');
+            setTimeout(() => {
+                this.classList.remove('btn-success');
+            }, 400);
+        });
+    </script>
+</body>
+</html>
+</body>
+</html>
